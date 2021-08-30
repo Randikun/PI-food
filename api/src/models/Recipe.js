@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
   sequelize.define('recipe', {
       
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
     },
