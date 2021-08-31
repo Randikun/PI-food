@@ -1,13 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (req, res)=>{
-    res.send('esto en un get a recipes')
-})
+
+ const {getAllRecipes, addRecipe, getRecipeById} = require("../controllers/Recipe")
 
 
-router.post('/', (req, res)=>{
-    res.send('esto en un post a recipes')
-})
+ router.get("/", getAllRecipes)
+ router.get('/:id', getRecipeById)
+ router.post("/", addRecipe)
 
-module.exports=router
+module.exports = router

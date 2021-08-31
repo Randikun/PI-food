@@ -1,13 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const {getTypes} = require("../controllers/Types")
 
-router.get('/', (req, res)=>{
-    res.send('esto en un get a types')
-})
-
-
-router.post('/', (req, res)=>{
-    res.send('esto en un post a types')
-})
+router.get("/", getTypes)
 
 module.exports=router
