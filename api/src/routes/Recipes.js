@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 
- const {getAllRecipes, addRecipe, getRecipeById} = require("../controllers/Recipe")
+ const {getAllRecipes, addRecipe, getRecipeById} = require("../controllers/Recipes")
 
 
  router.get("/", getAllRecipes)

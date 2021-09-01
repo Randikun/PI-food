@@ -2,10 +2,9 @@ require("dotenv").config();
 const { API_KEY } = process.env;
 
 const { Recipe, Diet } = require("../db");
-const { UUID } = require("uuid");
+const { v4: uuidv4 } = require("uuid");
 const axios = require("axios");
 const { Op } = require("sequelize");
-const e = require("express");
 
 
 async function APIcall(){
@@ -90,80 +89,92 @@ async function getAllRecipes(req, res, next) {
 }
 
 async function addRecipe(req, res, next) {
-    console.log('ENTROO')
-    console.log('reqbodyy', req.body)
+    
   const { title, summary, score, healthiness, image, steps, diets } = req.body;
   if (!title || !summary){
     return res.status(400).send('you need at least a title and a summary ')      
     };
   try {
-
-    console.log('ENTRA AL TRY')
     const newRecipe = await Recipe.create({
-      id: UUID(),
+      id:  uuidv4(),
       title,
       summary,
       score,
       healthiness,
       steps,
-      image: image
-        ? image
-        : "https://www.food4fuel.com/wp-content/uploads/woocommerce-placeholder-600x600.png",
+      image: image || "https://www.food4fuel.com/wp-content/uploads/woocommerce-placeholder-600x600.png",
     });
-    
-    console.log(diets)
-    console.log('new recipe', newRecipe)
-    
-    newRecipe.addDiet(dietTypes);
-    
-    res.json({
-      message: "You created a new recipe!",
-    });
+    console.log('ESTO ME MANDAN', diets)
+    const dietsId = diets.map(async(diet) =>{ 
+     try{
+       console.log('VOY A BUSCAR EL ID EN BD  QUE CORRESPONDE A ', diet)
+       let dietBD = await Diet.findAll({
+       where:{name:diet},
+       attributes:['id']
+       })
+       console.log('lo que me llega es lo siguiente',dietBD)
+       console.log('EL ID DEBERIA SER', dietBD[0].dataValues.id)
+       const id = dietBD[0].dataValues.id
+       return id;
+      }catch{err=>
+        console.log('error encontrando el id', err)
+        next(err)}
+     });
 
-  } catch {(err) => {
-      console.log('catcheado'); 
+ 
+     console.log('ahora viene el for each de DIETSID', ids)
+
+     ids.forEach(async (id) => {  console.log('id',id)
+                                await newRecipe.addDiet(id)
+                  });
+    
+    res.json({message: "You created a new recipe!"});
+
+  } catch {(err) => { 
       next(err);}}
 }
 
-const APIcallID = async ()=> {
+const APIcallID = async (id) => {
+  console.log('entrooo')
    try{
+       console.log('id', id)
         const response = await axios.get(
-        `https://api.spoonacular.com/recipes/${req.params.id}/information?apiKey=${API_KEY}`
+        `https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`
       );
-      console.log("RESPONSE",response)
-      const requiredInfo = response.data.results.map((recipe) => {
-          return {
-            title: recipe.title,
-            diets: recipe.diets.map((diet) => {
+      
+      console.log("RESPONSE",response.data)
+      const requiredInfo = {
+            title: response.data.title,
+            diets: response.data.diets.map((diet) => {
               return { name: diet };
             }),
-            healthyness: recipe.healthScore,
-            summary: recipe.summary,
-            image: recipe.image,
-            id: recipe.id,
-            score: parseInt(recipe.spoonacularScore),
-            steps: recipe.analyzedInstructions
+            healthiness: response.data.healthScore,
+            summary: response.data.summary,
+            image: response.data.image,
+            id: response.data.id,
+            score: parseInt(response.data.spoonacularScore),
+            steps: response.data.analyzedInstructions
               .map((r) => r.steps.map((s) => s.step))
               .flat(2)
               .join(""),
           };
-        });
-        return requiredInfo;
-   }catch{e=>console.log(e)}
+          return requiredInfo;
+       }
+    catch{e=>console.log(e)}
 }
 
 
 async function getRecipeById(req, res) {
 
   try {
-    console.log('TRY')
-    const requiredInfo = await APIcallID()
-    console.log('requiredInfo', requiredInfo)
+    
+    const requiredInfo = await APIcallID( req.params.id)
+    
     res.json(requiredInfo);
   } 
    
   catch (error) {
-    if (error.response.status === 404) {
+    if (error.response?.status === 404) {
             try{
                 const recipe = await Recipe.findByPk(req.params.id, {
                     include: {
