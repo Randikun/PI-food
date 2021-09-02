@@ -118,14 +118,11 @@ async function addRecipe(req, res, next) {
 }
 
 const APIcallID = async (id) => {
-  console.log('entrooo')
    try{
-       console.log('id', id)
         const response = await axios.get(
         `https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`
       );
       
-      console.log("RESPONSE",response.data)
       const requiredInfo = {
             title: response.data.title,
             diets: response.data.diets.map((diet) => {
@@ -148,37 +145,24 @@ const APIcallID = async (id) => {
 
 
 async function getRecipeById(req, res) {
-
   try {
-    
     const requiredInfo = await APIcallID( req.params.id)
-    
-    res.json(requiredInfo);
-  } 
-   
-  catch (error) {
-    if (error.response?.status === 404) {
-            try{
-                const recipe = await Recipe.findByPk(req.params.id, {
-                    include: {
-                     model: Diet,
-                     attributes: ["name"],
-                    through: {
-                     attributes: [],
-                    },
-                    },
-                    })
-                    if (recipe) return res.json(recipe);
-                    return res.sendStatus(404);
-             }catch{e=>console.log(e)}
-             
-    } 
-    
-    else {
-      res.status(500).json({ error: "Sorry! we could not find that recipe!" });
-    }
-  }
+    if (requiredInfo) res.json(requiredInfo);
+    else { try{
+              const recipe = await Recipe.findByPk(req.params.id, {
+               include: {
+              model: Diet,
+              attributes: ["name"],
+               },
+              })
+              if (recipe) return res.json(recipe);
+              return res.status(404).json({ error: "Sorry! we could not find that recipe!" })
+           }catch{e=>console.log(e)}
+         }
+  }    
+  catch {err=>next(err)}
 }
+
 
 module.exports = {
   addRecipe,
