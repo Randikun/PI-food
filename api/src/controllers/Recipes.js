@@ -7,6 +7,7 @@ const axios = require("axios");
 const { Op } = require("sequelize");
 
 
+
 async function APIcall(){
     try{  
     const recipeApi = await axios.get(
@@ -104,32 +105,14 @@ async function addRecipe(req, res, next) {
       steps,
       image: image || "https://www.food4fuel.com/wp-content/uploads/woocommerce-placeholder-600x600.png",
     });
-    console.log('ESTO ME MANDAN', diets)
-    const dietsId = diets.map(async(diet) =>{ 
-     try{
-       console.log('VOY A BUSCAR EL ID EN BD  QUE CORRESPONDE A ', diet)
-       let dietBD = await Diet.findAll({
-       where:{name:diet},
-       attributes:['id']
-       })
-       console.log('lo que me llega es lo siguiente',dietBD)
-       console.log('EL ID DEBERIA SER', dietBD[0].dataValues.id)
-       const id = dietBD[0].dataValues.id
-       return id;
-      }catch{err=>
-        console.log('error encontrando el id', err)
-        next(err)}
-     });
-
- 
-     console.log('ahora viene el for each de DIETSID', ids)
-
-     ids.forEach(async (id) => {  console.log('id',id)
-                                await newRecipe.addDiet(id)
-                  });
-    
+    if(diets.length){
+     diets.map(async(diet)=>{
+      try{
+        let dietdb = await Diet.findOne({where:{name:diet}})
+        newRecipe.addDiet(dietdb)
+      }catch{err=>next(err)}
+    })}
     res.json({message: "You created a new recipe!"});
-
   } catch {(err) => { 
       next(err);}}
 }
