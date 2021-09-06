@@ -46,20 +46,17 @@ let diets = [
 ];
 
 
-function getTypes(req, res, next) {
-	Diet.findAll()
-		.then((response) => {
-			if (response.length>0) {
-				return res.json(response);
-			} else {
-				Diet.bulkCreate(diets)
-					.then((response) => {
-						return res.json(response);
-					})
-					.catch((error) => next(error));
-			}
-		})
-		.catch((error) => next(error));
+async function getTypes(req, res, next) {
+	try{
+	const response = await Diet.findAll()
+   if (response.length>0) return res.json(response);
+   else {
+	   try{
+		const dietsDB = await Diet.bulkCreate(diets)
+		return res.json(dietsDB)
+	   }catch{err=>next(err)}	
+   }				
+   }catch{err=>next(err)}	
 }
 
 module.exports = {

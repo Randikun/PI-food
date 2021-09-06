@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import SearchBar from "../SearchBar";
 
 
 
@@ -17,9 +16,6 @@ export default function NavBar() {
                         <NavLink to="/addRecipe" >+</NavLink>
                         <NavLink to="/shoppingList" >ShoppingList</NavLink>
 
-                    </li>
-                    <li>
-                        <SearchBar/>
                     </li>
                 </ul>
             </nav>

@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+const { addRecipe } = require('./controllers/Recipes');
 const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 } = process.env;
@@ -33,8 +34,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Recipe, Diet} = sequelize.models;
 
 // Aca vendrian las relaciones
-Recipe.belongsToMany(Diet, {through:'RecipeDiet'});
-Diet.belongsToMany(Recipe, {through:'RecipeDiet'});
+Recipe.belongsToMany(Diet, {through:'RecipeDiet'}); 
+Diet.belongsToMany(Recipe, {through:'RecipeDiet'}); 
 
 
 

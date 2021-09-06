@@ -2,7 +2,7 @@ require("dotenv").config();
 const { API_KEY } = process.env;
 
 const { Recipe, Diet } = require("../db");
-const { v4: uuidv4 } = require("uuid");
+
 const axios = require("axios");
 const { Op } = require("sequelize");
 
@@ -16,10 +16,11 @@ async function APIcall(){
       const requiredInfo = recipeApi.data.results.map((recipe) => {
         return {
           title: recipe.title,
+          created:false,
           diets: recipe.diets.map((diet) => {
             return { name: diet };
           }),
-          healthyness: recipe.healthScore,
+          healthiness: recipe.healthScore,
           summary: recipe.summary,
           image: recipe.image,
           id: recipe.id,
@@ -45,9 +46,6 @@ async function getAllRecipes(req, res, next) {
         include: {
           model: Diet,
           attributes: ["name"],
-          through: {
-            attributes: [],
-          },
         },
       });
       const response = await Promise.all([recipeBD, requiredInfo]);
@@ -64,7 +62,7 @@ async function getAllRecipes(req, res, next) {
         recipe.title.toLowerCase().includes(query)
       );
 
-      const recipeBD = await Recipe.findAll({
+      const filteredrecipeBD = await Recipe.findAll({
         where: {
           title: {
             [Op.like]: `%${query}%`,
@@ -73,13 +71,10 @@ async function getAllRecipes(req, res, next) {
         include: {
           model: Diet,
           attributes: ["name"],
-          through: {
-            attributes: [],
-          },
         },
       });
 
-      const response = await Promise.all([recipeBD, filteredRecipeApi]);
+      const response = await Promise.all([filteredrecipeBD, filteredRecipeApi]);
 
       return res.send(response);
 
@@ -89,42 +84,16 @@ async function getAllRecipes(req, res, next) {
   }
 }
 
-async function addRecipe(req, res, next) {
-    
-  const { title, summary, score, healthiness, image, steps, diets } = req.body;
-  if (!title || !summary){
-    return res.status(400).send('you need at least a title and a summary ')      
-    };
-  try {
-    const newRecipe = await Recipe.create({
-      id:  uuidv4(),
-      title,
-      summary,
-      score,
-      healthiness,
-      steps,
-      image: image || "https://www.food4fuel.com/wp-content/uploads/woocommerce-placeholder-600x600.png",
-    });
-    if(diets.length){
-     diets.map(async(diet)=>{
-      try{
-        let dietdb = await Diet.findOne({where:{name:diet}})
-        newRecipe.addDiet(dietdb)
-      }catch{err=>next(err)}
-    })}
-    res.json({message: "You created a new recipe!"});
-  } catch {(err) => { 
-      next(err);}}
-}
 
 const APIcallID = async (id) => {
    try{
         const response = await axios.get(
         `https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`
       );
-      
+    
       const requiredInfo = {
             title: response.data.title,
+            created:false,
             diets: response.data.diets.map((diet) => {
               return { name: diet };
             }),
@@ -142,7 +111,6 @@ const APIcallID = async (id) => {
        }
     catch{e=>console.log(e)}
 }
-
 
 async function getRecipeById(req, res) {
   try {
@@ -165,7 +133,6 @@ async function getRecipeById(req, res) {
 
 
 module.exports = {
-  addRecipe,
   getRecipeById,
   getAllRecipes,
 };

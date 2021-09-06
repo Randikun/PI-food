@@ -4,17 +4,47 @@ export const REMOVE_RECIPE_FAVORITES = "REMOVE_RECIPE_FAVORITES"
 export const GET_RECIPE_DETAIL = "GET_RECIPE_DETAIL"
 export const ADD_INGREDIENT = "ADD_INGREDIENT"
 export const REMOVE_INGREDIENT = "REMOVE_INGREDIENT"
+export const FILTER_DIET = "FILTER_DIET"
+export const FILTER_CREATED = "FILTER_CREATED"
+export const ORDER_BY_TITLE = "ORDER_BY_TITLE"
+export const ORDER_BY_SCORE = "ORDER_BY_SCORE"
+export const GET_TYPES = "GET_TYPES"
+export const  ADD_RECIPE = " ADD_RECIPE"
 
 
 
-export  function AddRecipeFav(recipe){
+export function filterByDiet(payload){
+    return {
+        type: FILTER_CREATED,
+        payload
+    }
+}
+export function filterCreated(payload){
+    return {
+        type: FILTER_DIET,
+        payload
+    }
+}
+export function orderByTitle(payload){
+    return {
+        type: ORDER_BY_TITLE,
+        payload
+    }
+}
+export function orderByScore(payload){
+    return {
+        type: ORDER_BY_SCORE,
+        payload
+    }
+}
+export  function addRecipeFav(recipe){
     return {
         type: ADD_RECIPE_FAVORITES,
         payload: recipe
     }
 }
 
-export  function RemoveRecipeFav(id){
+export  function removeRecipeFav(id){
     return {
         type: REMOVE_RECIPE_FAVORITES,
         payload:id

@@ -28,7 +28,7 @@ export function AddIngredient({ addIngredient }) {
     <div>
       <form onSubmit={handleSubmit}>
         <input name="title" value={formData.title} placeholder='ingredient' onChange={(e)=>handleChange(e)}/>
-        <button type="submit" value="Submit">AGREGAR</button>
+        <button type="submit" value="Submit">ADD</button>
       </form>
     </div>
     

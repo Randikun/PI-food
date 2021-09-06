@@ -1,12 +1,12 @@
 import { GET_RECIPE_DETAIL } from ".";
+import axios from 'axios';
 
-export default function getRecipeDetail(id){
-    return function(dispatch){
-        return fetch(`http://localhost:3001/recipes/${id}`) //busca segun mi id
-        .then(response => response.json())
-        .then(json => {
-          dispatch({ type: GET_RECIPE_DETAIL, payload: json }); //despacha una accion que el reducer SI puede reconocer cuyo payload es la data from API
-        });
+export default  function getRecipeDetail(id){
+    return async function(dispatch){
+      try{
+      const response = await axios(`http://localhost:3001/recipes/${id}`)
+      return dispatch({ type: GET_RECIPE_DETAIL, payload: response.data })
+      }catch(e){console.log(e)}
     }
 
-}
+}  

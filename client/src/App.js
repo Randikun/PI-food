@@ -1,7 +1,7 @@
 import './App.css';
 
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, BrowserRouter, Switch} from "react-router-dom";
 
 import Favorites from "./components/Favorites";
 import RecipeDetail from "./components/RecipeDetail";
@@ -18,9 +18,11 @@ import LandingPage from "./components/LandingPage";
 
 function App() {
   return (
+      <BrowserRouter>
       <React.Fragment>
-          <Route path='/' component={Nav} />
+        <Switch>
           <Route exact path="/" component={LandingPage} />
+          <Route path='/' component={Nav} />
           <Route path="/home" component={Home} />
           <Route path="/recipe/:id" component={RecipeDetail} />
           <Route path="/favorites" component={Favorites} />
@@ -28,7 +30,9 @@ function App() {
           <Route path='/register' component={Register} />
           <Route path='/addRecipe' component={AddRecipe} />
           <Route path='/shoppingList' component={ShoppingList} />
+        </Switch>
       </React.Fragment>
+      </BrowserRouter>
       )
 }
 

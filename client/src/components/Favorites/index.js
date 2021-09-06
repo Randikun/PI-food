@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
-import { RemoveRecipeFav } from "../../actions";
+import { removeRecipeFav } from "../../actions";
 
 export function Favorites(props){
   
@@ -15,7 +15,7 @@ export function Favorites(props){
             return <li key={fav.id}>
               
               <Link to={`/recipe/${fav.id}`}><div>{fav.Title}</div></Link>
-              <button onClick={()=>props.RemoveRecipeFav(fav.id)}>X</button>
+              <button onClick={()=>props.removeRecipeFav(fav.id)}>X</button>
               </li>
           })}
         </ul>
@@ -30,7 +30,7 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
      return {
-      RemoveRecipeFav: (id)=>dispatch(RemoveRecipeFav(id))
+      removeRecipeFav: (id)=>dispatch(removeRecipeFav(id))
      }
 }
 
