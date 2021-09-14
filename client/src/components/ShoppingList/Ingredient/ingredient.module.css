@@ -1,36 +1,29 @@
-
-
 @font-face {
-    font-family: "Mystery Quest";
-    src: url("../../../images/album-avantquelombre.ttf");
-  }
+  font-family: "Mystery Quest";
+  src: url("../../../images/album-avantquelombre.ttf");
+}
 
-.ingredient{
-    font-family: 'Avant que';
-    display: flex;
-    margin-top: 20px;
-    font-size: 30px;
-    width: 90%;
-    
-    justify-content: space-between;
-    
-    
+.ingredient {
+  font-family: "Avant que";
+  display: flex;
+  margin-top: 20px;
+  font-size: 30px;
+  width: 90%;
+
+  justify-content: space-between;
 }
-.ingredient span{
-  
-    line-height: 0.5;
-    width: 50%;
-    
+.ingredient span {
+  line-height: 0.5;
+  width: 50%;
 }
-.iconCont{
-    display: flex;
-    width: 50%;
-    
+.iconCont {
+  display: flex;
+  width: 50%;
 }
-.x{
-    line-height: 0.5;
-    margin:auto;
-    
-   margin-right: 0;   
-   cursor: pointer;
+.x {
+  line-height: 0.5;
+  margin: auto;
+
+  margin-right: 0;
+  cursor: pointer;
 }
