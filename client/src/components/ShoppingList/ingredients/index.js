@@ -1,29 +1,30 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector  } from 'react-redux';
+import Ingredient from '../Ingredient'
+import s from './ingredients.module.css'
 
 
-export function Ingredients(props) {
+export function Ingredients() {
+
+  const ingredients = useSelector(state=>state.ingredients)
+
   return (
-    <div>
+    <div className={`${s.ingredients}`}>
       
       {
-     props.ingredients.map(Ingredient => (
-      
-        <li key={Ingredient.id}>
-          <Ingredient ingredient={Ingredient}/>
+     ingredients.map(ingredient => {
+      return(
+        <li className={`${s.li}`} key={ingredient.id}>
+          <Ingredient ingredient={ingredient}/>
         </li>
-    
+      )   
    
-     ))}
+      })}
     
     </div>
   )
 };
 
-function mapStateToProps(state) {
-  return {
-  ingredients: state.ingredients,
-  };
-  }
+
   
-  export default connect(mapStateToProps)(Ingredients);
+  export default Ingredients;

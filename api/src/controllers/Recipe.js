@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 
 
 async function addRecipe(req, res, next) {
-    
+    console.log('body en back', req.body)
     const { title, summary, score, healthiness, image, steps, diets } = req.body;
     if (!title || !summary){
       return res.status(400).send('you need at least a title and a summary ')      
@@ -18,21 +18,23 @@ async function addRecipe(req, res, next) {
         created: true,
         title,
         summary,
-        score,
-        healthiness,
-        steps,
-        image: image || "https://www.food4fuel.com/wp-content/uploads/woocommerce-placeholder-600x600.png",
+        score: score|| 0,
+        healthiness: healthiness || 0,
+        steps: steps || 'Sadly we don`t know how to prepare this recipe step by step',
+        image: image? image: "https://www.food4fuel.com/wp-content/uploads/woocommerce-placeholder-600x600.png",
       });
+      console.log('newrecipe', newRecipe)
      
       if(diets.length){
        diets.map(async(diet)=>{
         try{
           let dietdb = await Diet.findOne({where:{name:diet}})
           newRecipe.addDiet(dietdb)
-        }catch{err=>next(err)}
+          console.log('dietdb', dietdb)
+        }catch{err=> console.log('FALLÒ ACA');next(err)}
       })}
       res.json({message: "You created a new recipe!"});
-    } catch {(err) => { 
+    } catch {(err) => { console.log('NONONO, FALLÒ ACA');
         next(err);}}
   }
 

@@ -17,7 +17,7 @@ async function APIcall(){
         return {
           title: recipe.title,
           created:false,
-          diets: recipe.diets.map((diet) => {
+          Diets: recipe.diets.map((diet) => {
             return { name: diet };
           }),
           healthiness: recipe.healthScore,
@@ -45,11 +45,13 @@ async function getAllRecipes(req, res, next) {
       const recipeBD = await Recipe.findAll({
         include: {
           model: Diet,
-          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
         },
+        
       });
-      const response = await Promise.all([recipeBD, requiredInfo]);
-      return res.send(response);
+      return res.send([...recipeBD, ...requiredInfo]);
     } catch (err) {
       next(err);
     }
@@ -70,14 +72,14 @@ async function getAllRecipes(req, res, next) {
         },
         include: {
           model: Diet,
-          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
         },
       });
 
-      const response = await Promise.all([filteredrecipeBD, filteredRecipeApi]);
 
-      return res.send(response);
-
+      return res.send([...filteredrecipeBD, ...filteredRecipeApi]);
     } catch {
       (err) => next(err);
     }
@@ -94,11 +96,11 @@ const APIcallID = async (id) => {
       const requiredInfo = {
             title: response.data.title,
             created:false,
-            diets: response.data.diets.map((diet) => {
+            Diets: response.data.diets.map((diet) => {
               return { name: diet };
             }),
             healthiness: response.data.healthScore,
-            summary: response.data.summary,
+            summary: response.data.summary.replace(/<[^>]*>?/g, ""),
             image: response.data.image,
             id: response.data.id,
             score: parseInt(response.data.spoonacularScore),
@@ -118,10 +120,12 @@ async function getRecipeById(req, res) {
     if (requiredInfo) res.json(requiredInfo);
     else { try{
               const recipe = await Recipe.findByPk(req.params.id, {
-               include: {
-              model: Diet,
-              attributes: ["name"],
-               },
+                include: {
+                  model: Diet,
+                  through: {
+                    attributes: [],
+                  },
+                }
               })
               if (recipe) return res.json(recipe);
               return res.status(404).json({ error: "Sorry! we could not find that recipe!" })

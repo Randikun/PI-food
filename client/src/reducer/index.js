@@ -1,12 +1,14 @@
-import { GET_RECIPES, ADD_RECIPE_FAVORITES, REMOVE_RECIPE_FAVORITES, GET_RECIPE_DETAIL, REMOVE_INGREDIENT, ADD_INGREDIENT, FILTER_DIET, FILTER_CREATED, ORDER_BY_TITLE, ORDER_BY_SCORE, GET_TYPES, ADD_RECIPE} from "../actions";
+import { GET_RECIPES, ADD_RECIPE_FAVORITES, REMOVE_RECIPE_FAVORITES, GET_RECIPE_DETAIL, REMOVE_INGREDIENT, ADD_INGREDIENT, FILTER_DIET, FILTER_CREATED, ORDER_BY_TITLE, ORDER_BY_SCORE, GET_TYPES, ADD_RECIPE, REMOVE_RECIPE} from "../actions";
 
 const initialState = {
     recipesLoaded:[],
     allRecipes:[],
     favoriteRecipes:[],
     recipeDetail:"",
-    ingregients:[],
+    ingredients:[],
     types:[]
+    
+
 };
 
 export default function rootReducer(state = initialState, action){
@@ -17,6 +19,11 @@ export default function rootReducer(state = initialState, action){
                   recipesLoaded : action.payload,
                   allRecipes: action.payload
                 };
+        case REMOVE_RECIPE:
+            return{
+                ...state,
+                recipesLoaded:state.recipesLoaded.filter(r=>r.id!==action.payload)
+            }
         case GET_TYPES: 
                 return {
                   ...state,
@@ -33,14 +40,21 @@ export default function rootReducer(state = initialState, action){
                  };
         case FILTER_DIET:
                  const allRecipes = state.allRecipes
-                 const filteredDiet = action.payload === 'All'? allRecipes : allRecipes.filter(el=>el.diets.map(diet=> diet===action.payload))
+                 const filteredDiet = []
+                 
+                  allRecipes.map(recipe=>{
+                     
+                     return recipe.Diets?.map(diet=>{
+                         console.log(diet.name.toLowerCase(), action.payload.toLowerCase())
+                         return diet.name.toLowerCase()===action.payload.toLowerCase()? filteredDiet.push(recipe)
+                         : null})})
                  return{
                      ...state,
                      recipesLoaded: filteredDiet
                  };
         case FILTER_CREATED:
                  const allRecipes2 = state.allRecipes
-                 const filteredCreated = action.payload === 'Created'? allRecipes2.filter(el=>el.created) : allRecipes2.filter(el=>!el.created)
+                 const filteredCreated = action.payload === 'Created'? allRecipes2.filter(recipe=>recipe.created) : allRecipes2.filter(recipe=>!recipe.created)
                  return{
                      ...state,
                      recipesLoaded: action.payload === 'All' ? state.allRecipes : filteredCreated
@@ -49,12 +63,12 @@ export default function rootReducer(state = initialState, action){
                 
                  let sortedRecipes = action.payload === 'Asc'? 
                  state.recipesLoaded.sort(function(a, b){
-                     if (a.title > b.title)return 1
-                     else if (a.title < b.title)return -1
+                     if (a.title.toLowerCase() > b.title.toLowerCase())return 1
+                     else if (a.title.toLowerCase() < b.title.toLowerCase())return -1
                      return 0
                  }) : state.recipesLoaded.sort(function(a, b){
-                    if (a.title > b.title)return -1
-                    else if (a.title < b.title)return 1
+                    if (a.title.toLowerCase() > b.title.toLowerCase())return -1
+                    else if (a.title.toLowerCase() < b.title.toLowerCase())return 1
                     return 0
                 })
                  return{
@@ -90,12 +104,12 @@ export default function rootReducer(state = initialState, action){
         case ADD_INGREDIENT:
             return{
                 ...state,
-                ingregients: [action.payload, ...state.ingregients]
+                ingredients: [action.payload, ...state.ingredients]
             };
         case REMOVE_INGREDIENT:
             return{
                 ...state,
-                ingredients: state.ingregients.filter(i=>i.id!==action.payload)
+                ingredients: state.ingredients.filter(i=>i.id!==action.payload)
             };
        
         default: return state;

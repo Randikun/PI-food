@@ -1,0 +1,47 @@
+   @font-face {
+    font-family: "Avant que";
+    src: url('../../../images/album-avantquelombre.ttf');
+  } 
+ 
+
+.wrap {
+  margin-top: -60px;
+  width: 100%;
+  
+  padding: 0;
+ 
+}
+
+.form{
+    display: flex;
+    margin:auto;
+    width: 90%;
+    height: 60px;
+    margin-top: 30px;
+    font-family: 'Avant que';
+    justify-content: space-between;
+
+    
+ }
+.input{
+     
+    
+     width: 90%;
+     border: none;
+     outline: none;
+     font-family: 'Avant que';
+     font-size: 30px;
+     background-color: transparent;
+ }
+
+.input:hover {
+        border-bottom: 1px solid rgb(8, 5, 5);
+
+    }
+.icon{
+    width: 30px;
+    height: 30px;
+    
+}
+
+

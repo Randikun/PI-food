@@ -2,6 +2,8 @@ import React from "react";
 import {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import getRecipes from "../../actions/getRecipes";
+import s from './search.module.css'
+import * as ImIcons from 'react-icons/im'
 
 
 export default function SearchBar(){
@@ -11,6 +13,7 @@ export default function SearchBar(){
   function handleInputChange(e){     
     e.preventDefault()                                     
     setTitle(e.target.value)
+    // dispatch(getRecipes(title))
   };
 
   function handleSubmit(e){
@@ -20,18 +23,21 @@ export default function SearchBar(){
   };
      
     return (
-      <div>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <div>
-            <label>Search for your recipe </label>
-            <input
+      <div className={`${s.wrap}`}>
+        <form className={`${s.form}`} onSubmit={(e) => handleSubmit(e)}>
+          
+            
+            <input className={`${s.search}`}
               type="text"
               id="title"
               autoComplete="off"
+              placeholder='search'
               onChange={(e) => handleInputChange(e)}
+              value={title}
             />
-          </div>
-          <button type="submit">SEARCH</button>
+            
+          
+          <ImIcons.ImSearch className={`${s.search_submit}`} type="submit"/>
         </form>
     
       </div>

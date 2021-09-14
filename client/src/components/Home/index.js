@@ -1,17 +1,20 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
 import {useDispatch,useSelector} from 'react-redux'
-import { Link } from 'react-router-dom';
 import getRecipes from "../../actions/getRecipes";
-import {filterByDiet, filterCreated, orderByTitle, orderByScore, addRecipeFav} from '../../actions'
+import getTypes from '../../actions/getTypes'
+import {filterByDiet, filterCreated, orderByTitle, orderByScore} from '../../actions'
 import Card from '../Card';
-import Paginado from '../paginado';
+import Paginate from '../paginate';
 import SearchBar from '../SearchBar';
+import s from './home.module.css'
+
 
 
 export default function Home(){
     const dispatch = useDispatch()
     const allRecipes = useSelector((state)=>state.recipesLoaded)
+    const dietas = useSelector((state)=>state.types)
 
     const [currentPage, setCurrentPage]= useState(1)
     const [recipesPerPage]= useState(9)
@@ -20,21 +23,23 @@ export default function Home(){
     const lastRecipe = currentPage * recipesPerPage
     const firstRecipe = lastRecipe - recipesPerPage
     const currentRecipes = allRecipes.slice(firstRecipe, lastRecipe)
-
-    const paginado=(pageNumber)=>{
+    function paginate(pageNumber){
         setCurrentPage(pageNumber)
     }
     
     useEffect(()=>{
-        dispatch(getRecipes())
+        dispatch(getRecipes(""))
+        dispatch(getTypes())
+    
     },[dispatch])
    
     function handleClickGet(e){
         e.preventDefault()
-        dispatch(getRecipes())
+        dispatch(getRecipes(""))
     }
 
     function handleFilterDiet(e){
+        console.log('despachando', e.target.value)
         e.preventDefault()
         dispatch(filterByDiet(e.target.value))
     }
@@ -55,53 +60,63 @@ export default function Home(){
         setCurrentPage(1)
         setOrder(`ordered ${e.target.value}`)
     }
+    
     return(
-        <div>
-            <h1>ACA VERAS TUS RECETAS</h1>
-            <button onClick={e=>{handleClickGet(e)}}>recargar todas las recetas</button>
-            <div>
-                <select onChange={e=>{handleSortTitle(e)}}>
+        <div  className={`${s.container}`}>
+            
+            <div className={`${s.filters}`}>
+                <button className={`${s.clear}`} onClick={e=>{handleClickGet(e)}}>CLEAR FILTERS</button>
+                <select className={`${s.select}`} onChange={e=>{handleSortTitle(e)}}>
+                <option>By name</option>
+                    
                     <option value='Asc'>A-Z</option>
                     <option value='Desc'>Z-A</option>
+                    
                 </select>
-                <select onChange={e=>{handleSortScore(e)}} >
+
+                <select  className={`${s.select}`} onChange={e=>{handleSortScore(e)}} >
+                <option>By score</option>
+               
                     <option value='Asc'>Score Ascendente</option>
                     <option value='Desc'>Score Descendente</option>
+                
                 </select>
-                <select onChange={e=>{handleFilterDiet(e)}}>
-                    <option value='All'>Todos</option>
-                    <option value='Gluten free'>Gluten free</option>
-                    <option value='Ketogenic'>Ketogenic</option>
-                    <option value='Vegetarian'>Vegetarian</option>
-                    <option value='Lacto-Vegetarian'>Lacto-Vegetarian</option>
-                    <option value='Ovo-Vegetarian'>Ovo-Vegetarian</option>
-                    <option value='Vegan'>Vegan</option>
-                    <option value='Pescatarian'>Pescatarian</option>
-                    <option value='Paleolithic'>Paleolithic</option>
-                    <option value='Primal'>Primal</option>
-                    <option value='Whole 30'>Whole 30</option>
+                <select className={`${s.select}`} onChange={e=>{handleFilterDiet(e)}}>
+                <option>By diet</option>
+               { dietas?.map(diet=> {return(
+               <option value={`${diet.name}`} key={`${diet.id}`} >{diet.name}</option>)})}             
                 </select>
-                <select onChange={e=>{handleFilterCreated(e)}}>
+                <select className={`${s.select}`} onChange={e=>{handleFilterCreated(e)}}>
+                <option>By owner</option>
+
                     <option value='All'>Todos</option>
                     <option value='Created'>Creados</option>
                     <option value='Api'>Api</option>
+               
                 </select>
+         </div>
+         <div className={`${s.searchBar}`}>
                 <SearchBar/>
-                 {
-                    currentRecipes?.map(recipe=>{
+
+         </div>
+                <div className={`${s.cards}`}>
+                 {currentRecipes ? ( 
+                      currentRecipes.map(recipe=>{
                         return(
-                        <li key={recipe.id}>
-                         <Link  to={`/recipe/${recipe.id}`}>
-                             <Card name={recipe.name} image={recipe.image} diet={recipe.diets}/>
-                             <button onClick={()=>dispatch(addRecipeFav(recipe))}>AGREGAR A FAVORITOS</button>
-                         </Link>
-                        </li>
+                        <div key={recipe.id}>
+                         
+                             <Card  recipe={recipe} id={recipe.id} title={recipe.title} image={recipe.image} diets={recipe.Diets}/>
+                        
+                        </div>
                         )
 
-                     })
-                 }
-                 <Paginado recipesPerPage={recipesPerPage} allRecipes={allRecipes.length} paginado={paginado}/>
-            </div>
-        </div>
+                     })) :<h2>Loading...</h2>
+                    
+                  
+                    }
+
+                </div>
+                 <Paginate recipesPerPage={recipesPerPage} allRecipes={allRecipes.length} paginate={paginate}/>
+    </div>
     )
 }

@@ -1,0 +1,25 @@
+
+.ingredients{
+    margin-top: 70px;
+    
+    /* overflow: scroll; */
+   
+   
+    overflow: auto; /*Graceful degradation para Firefox*/
+    overflow: overlay;
+   }
+   
+   /*Webkit(Chrome, Android browser, Safari, Edge...)*/
+   .ingredients::-webkit-scrollbar {
+    display: none;
+   }
+   .ingredients:hover::-webkit-scrollbar {
+    display: initial;
+   }
+   .ingredients::-webkit-scrollbar-thumb {
+   background-color: rgb(181, 184, 185);
+   }
+
+.li{
+    display: flex;
+}

@@ -10,18 +10,24 @@ export const ORDER_BY_TITLE = "ORDER_BY_TITLE"
 export const ORDER_BY_SCORE = "ORDER_BY_SCORE"
 export const GET_TYPES = "GET_TYPES"
 export const  ADD_RECIPE = " ADD_RECIPE"
+export const REMOVE_RECIPE='REMOVE_RECIPE'
 
 
-
+export function removeRecipe(id){
+    return {
+        type: REMOVE_RECIPE,
+        payload:id 
+    }
+  }
 export function filterByDiet(payload){
     return {
-        type: FILTER_CREATED,
+        type: FILTER_DIET,
         payload
     }
 }
 export function filterCreated(payload){
     return {
-        type: FILTER_DIET,
+        type: FILTER_CREATED,
         payload
     }
 }
@@ -53,10 +59,10 @@ export  function removeRecipeFav(id){
 
 export let ingredientId = 1;
 
-export const addIngredient = function(arg){
+export const addIngredient = function(ingredient){
     return{
         type: ADD_INGREDIENT,
-        payload:{...arg,
+        payload:{ingredient,
             id: ingredientId++,
            
     }}

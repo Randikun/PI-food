@@ -1,19 +1,28 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removeIngredient } from '../../../actions';
+import s from './ingredient.module.css'
+// import * as TiIcons from 'react-icons/ti' 
 
-export function Ingredient({title, id}) {
+
+export function Ingredient(props) {
+  const dispatch = useDispatch()
+  function handleClick(e){
+    dispatch(removeIngredient(props.ingredient.id))
+  }
   return (
-    <div>
-      {title}
-    
-     <button
-     onClick={() => removeIngredient(id)} >
-    Remove
-   </button>
+    <div className={`${s.ingredient}`}>
+     <span>{props.ingredient.ingredient}</span>
+     {/* <TiIcons.TiDeleteOutline  className={`${s.icon}`}  onClick={(e) => handleClick(e)}></TiIcons.TiDeleteOutline> */}
+     <div className={`${s.iconCont}`}>
+
+     <div className={`${s.x}`}  onClick={(e) => handleClick(e)}>x</div>
+     </div>
+     
+
    </div>
   )
 };
 
 
-export default connect(null, {removeIngredient})(Ingredient);
+export default Ingredient;
