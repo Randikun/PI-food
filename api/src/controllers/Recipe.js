@@ -2,7 +2,6 @@ const { Recipe, Diet } = require("../db");
 const { v4: uuidv4 } = require("uuid");
 
 async function addRecipe(req, res, next) {
-  console.log("body en back", req.body);
   const { title, summary, score, healthiness, image, steps, diets } = req.body;
   if (!title || !summary) {
     return res.status(400).send("you need at least a title and a summary ");

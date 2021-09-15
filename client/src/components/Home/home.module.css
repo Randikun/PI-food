@@ -1,6 +1,4 @@
-body {
-  background-color: #c1dbe0;
-}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -21,8 +19,8 @@ body {
 
 .container {
   background-image: url("../../images/mesa.jpg");
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 200vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
