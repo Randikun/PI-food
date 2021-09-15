@@ -34,24 +34,31 @@ export default function AddRecipe() {
 
   const [errors, setErrors] = useState({});
   const [state, setState] = useState({
-    title: "",
-    summary: "",
-    score: "",
-    healthiness: "",
-    image: "",
-    steps: "",
-    diets: [],
+    title:'',
+    summary:'',
+    score:'',
+    healthiness:'',
+    image:'',
+    steps:'',
+    diets:[],
   });
 
   function handleInputChange(e) {
-    setState((prev) => {
-      const newState = {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-      setErrors(validate(newState));
-      return newState;
-    });
+    console.log('E.TARGET.VALUE', e.target.value)
+    console.log('NAME', e.target.name)
+  //   setState(prev=>{
+  //     const newState = {
+  //         ...prev,
+  //         [e.target.name] : e.target.value
+  //     }
+  //     setErrors(validate(newState))
+  //     return newState
+  // })
+    setState({
+      ...state,
+      [e.target.name]: e.target.value
+    })
+      setErrors(validate(state))
   }
   console.log("dietas", dietas);
   function handleCheck(e) {
@@ -68,7 +75,14 @@ export default function AddRecipe() {
     e.preventDefault();
     dispatch(addRecipe(state));
     alert("You created a new Recipe!");
-    setState({ title: "", summary: "", image: "", steps: "", diets: [] });
+    setState({ 
+    title:'',
+    summary:'',
+    score:'',
+    healthiness:'',
+    image:'',
+    steps:'',
+    diets:[], });
     history.push("/home");
   }
 
@@ -85,11 +99,11 @@ export default function AddRecipe() {
           <div className={`${s.caja}`}>
             <label>Title:</label>
             <input
-              type="text"
-              name="title"
+              type='text'
+              name='title'
               value={state.title}
-              placeholder="Title"
-              required
+              placeholder='Title'
+              
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -97,11 +111,11 @@ export default function AddRecipe() {
           <div className={`${s.caja}`}>
             <label>Summary:</label>
             <input
-              type="text"
-              name="summary"
+              type='text'
+              name='summary'
               value={state.summary}
-              placeholder="Summary"
-              required
+              placeholder='Summary'
+              
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -109,10 +123,10 @@ export default function AddRecipe() {
           <div className={`${s.caja}`}>
             <label>Score:</label>
             <input
-              type="number"
-              name="score"
+              type='number'
+              name='score'
               value={state.score}
-              placeholder="Score"
+              placeholder='Score'
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -120,23 +134,23 @@ export default function AddRecipe() {
           <div className={`${s.caja}`}>
             <label>Healthiness:</label>
             <input
-              type="text"
-              name="healthiness"
+              type='text'
+              name='healthiness'
               value={state.healthiness}
-              placeholder="Healthiness"
+              placeholder='Healthiness'
               onChange={(e) => handleInputChange(e)}
             />
           </div>
           {errors.healthiness && (
-            <h5 className="error">{errors.healthiness}</h5>
+            <h5 className='error'>{errors.healthiness}</h5>
           )}
           <div className={`${s.caja}`}>
             <label>Image:</label>
             <input
-              type="url"
-              name="image"
+              type='url'
+              name='image'
               value={state.image}
-              placeholder="image url"
+              placeholder='image url'
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -144,10 +158,10 @@ export default function AddRecipe() {
           <div className={`${s.caja}`}>
             <label>Step by step:</label>
             <input
-              type="text"
-              name="steps"
+              type='text'
+              name='steps'
               value={state.steps}
-              placeholder="steps"
+              placeholder='steps'
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -158,7 +172,7 @@ export default function AddRecipe() {
                 <span>
                   <input
                     key={`${diet.id}`}
-                    type="checkbox"
+                    type='checkbox'
                     value={`${diet.name}`}
                     name={`${diet.name}`}
                     onChange={(e) => handleCheck(e)}
