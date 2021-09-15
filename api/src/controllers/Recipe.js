@@ -30,6 +30,7 @@ async function addRecipe(req, res, next) {
           newRecipe.addDiet(dietdb);
           console.log("dietdb", dietdb);
         } catch {
+          console.log('AK HAY ERROR');
           (err) => next(err);
         }
       });
@@ -37,11 +38,14 @@ async function addRecipe(req, res, next) {
     res.json({ message: "You created a new recipe!" });
   } catch {
     (err) => {
+      console.log('OOO AK');
       next(err);
     };
   }
 }
 
+
 module.exports = {
   addRecipe,
+  
 };

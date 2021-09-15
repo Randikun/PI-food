@@ -31,6 +31,8 @@ async function APIcall() {
     });
     return requiredInfo;
   } catch {
+    console.log('HAY ERROR EN APICALL');
+
     (e) => console.log(e);
   }
 }
@@ -50,6 +52,8 @@ async function getAllRecipes(req, res, next) {
       });
       return res.send([...recipeBD, ...requiredInfo]);
     } catch (err) {
+      console.log('AK HAY ERROR');
+
       next(err);
     }
   } else {
@@ -77,6 +81,8 @@ async function getAllRecipes(req, res, next) {
 
       return res.send([...filteredrecipeBD, ...filteredRecipeApi]);
     } catch {
+      console.log('AK HAY ERROR');
+
       (err) => next(err);
     }
   }

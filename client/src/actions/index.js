@@ -12,13 +12,13 @@ export const GET_TYPES = "GET_TYPES"
 export const  ADD_RECIPE = " ADD_RECIPE"
 export const REMOVE_RECIPE='REMOVE_RECIPE'
 
-
-export function removeRecipe(id){
-    return {
+export function removeRecipe(payload){
+    return{
         type: REMOVE_RECIPE,
-        payload:id 
+        payload
     }
-  }
+}
+
 export function filterByDiet(payload){
     return {
         type: FILTER_DIET,
