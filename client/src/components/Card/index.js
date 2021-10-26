@@ -1,16 +1,43 @@
-import React from "react";
-import { addRecipeFav, removeRecipeFav, removeRecipe } from "../../actions";
+import React, {useState} from "react";
+import removeRecipe  from "../../actions/removeRecipe";
 import s from "./card.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import * as MdIcons from "react-icons/md";
 import * as TiIcons from "react-icons/ti";
 import { Link } from "react-router-dom";
+import { saveFavState, removeFavState, loadFavState } from "../../localStorage";
+import Swal from "sweetalert2";
+
 
 export default function Card(props) {
-  const dispatch = useDispatch();
-  const favs = useSelector((state) => state.favoriteRecipes);
+  const dispatch = useDispatch()
+  // const history = useHistory()
+  var favorites = loadFavState();
+  const [favs, setFavs] = useState("");
 
-  // <Link  to={`/recipes/${props.id}`}>
+  function handleDelete(recipe) {
+    Swal.fire({
+      title: "Are you sure? ",
+      text: "There's no turn back",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(removeRecipe(recipe.id))
+        Swal.fire({
+          title: "Deleted!",
+          text: `it's gone.`,
+          imageUrl: "https://i.gifer.com/7efs.gif",
+          imageWidth: 250,
+          imageHeight: 200,
+          imageAlt: "Custom image",
+        });
+      }
+    });
+  }
 
   return (
     <div>
@@ -30,17 +57,27 @@ export default function Card(props) {
             </div>
             <div className={`${s.iconCont}`}>
               <div className={`${s.icons}`}>
-                {favs.includes(props.recipe) ? (
+                {favorites.includes(JSON.stringify(props.recipe)) ? (
                   <MdIcons.MdFavorite
-                    onClick={() => dispatch(removeRecipeFav(props.id))}
+                    onClick={() => {
+                      removeFavState(props.recipe);
+                      favorites = loadFavState();
+                      setFavs("eliminado de favs");
+                      console.log(favs)
+                    }}
                   ></MdIcons.MdFavorite>
                 ) : (
                   <MdIcons.MdFavoriteBorder
-                    onClick={() => dispatch(addRecipeFav(props.recipe))}
+                    onClick={() => {
+                      saveFavState(props.recipe);
+                      favorites = loadFavState();
+                      setFavs("agregado a favs");
+                      console.log(favs)
+                    }}
                   ></MdIcons.MdFavoriteBorder>
                 )}
                 <TiIcons.TiDelete
-                  onClick={() => dispatch(removeRecipe(props.id))}
+                  onClick={() =>handleDelete(props.recipe)}
                 ></TiIcons.TiDelete>
               </div>
             </div>

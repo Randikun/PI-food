@@ -12,12 +12,7 @@ export const GET_TYPES = "GET_TYPES"
 export const  ADD_RECIPE = " ADD_RECIPE"
 export const REMOVE_RECIPE='REMOVE_RECIPE'
 
-export function removeRecipe(payload){
-    return{
-        type: REMOVE_RECIPE,
-        payload
-    }
-}
+
 
 export function filterByDiet(payload){
     return {
@@ -43,19 +38,7 @@ export function orderByScore(payload){
         payload
     }
 }
-export  function addRecipeFav(recipe){
-    return {
-        type: ADD_RECIPE_FAVORITES,
-        payload: recipe
-    }
-}
 
-export  function removeRecipeFav(id){
-    return {
-        type: REMOVE_RECIPE_FAVORITES,
-        payload:id
-    }
-}
 
 export let ingredientId = 1;
 

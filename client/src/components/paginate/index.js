@@ -11,8 +11,8 @@ export default function Paginate({ recipesPerPage, allRecipes, paginate }) {
       <div className={`${s.paginate}`}>
         {pageNumbers?.map((number) => {
           return (
-            <div key={number} className={`${s.number}`}>
-              <a onClick={() => paginate(number)}>{number}</a>
+            <div key={number} className={`${s.number}`}  onClick={() => paginate(number)}>
+              <span className={s.span}>{number}</span>
             </div>
           );
         })}

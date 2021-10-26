@@ -1,7 +1,5 @@
 import {
   GET_RECIPES,
-  ADD_RECIPE_FAVORITES,
-  REMOVE_RECIPE_FAVORITES,
   GET_RECIPE_DETAIL,
   REMOVE_INGREDIENT,
   ADD_INGREDIENT,
@@ -34,9 +32,6 @@ export default function rootReducer(state = initialState, action) {
     case REMOVE_RECIPE:
       return {
         ...state,
-        recipesLoaded: state.recipesLoaded.filter(
-          (r) => r.id !== action.payload
-        ),
       };
     case GET_TYPES:
       return {
@@ -114,18 +109,7 @@ export default function rootReducer(state = initialState, action) {
         recipesLoaded: sortedRecipesScore,
       };
 
-    case ADD_RECIPE_FAVORITES:
-      return {
-        ...state,
-        favoriteRecipes: [action.payload, ...state.favoriteRecipes],
-      };
-    case REMOVE_RECIPE_FAVORITES:
-      return {
-        ...state,
-        favoriteRecipes: state.favoriteRecipes.filter(
-          (fr) => fr.id !== action.payload
-        ),
-      };
+
     case ADD_INGREDIENT:
       return {
         ...state,

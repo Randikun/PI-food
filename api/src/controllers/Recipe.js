@@ -20,14 +20,12 @@ async function addRecipe(req, res, next) {
         ? image
         : "https://www.food4fuel.com/wp-content/uploads/woocommerce-placeholder-600x600.png",
     });
-    console.log("newrecipe", newRecipe);
 
     if (diets.length) {
       diets.map(async (diet) => {
         try {
           let dietdb = await Diet.findOne({ where: { name: diet } });
           newRecipe.addDiet(dietdb);
-          console.log("dietdb", dietdb);
         } catch {
           console.log('AK HAY ERROR');
           (err) => next(err);
@@ -42,6 +40,8 @@ async function addRecipe(req, res, next) {
     };
   }
 }
+
+
 
 
 module.exports = {

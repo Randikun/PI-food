@@ -24,9 +24,21 @@
   transition: 0.5s;
 }
 
+.span{
+  margin: auto;
+  font-weight: 800;
+}
+
+.span:hover{
+  color: #c1dbe0;
+}
+
+
+
 .number:hover {
   cursor: pointer;
   background-color: transparent;
   color: #c1dbe0;
   border: solid 2px #c1dbe0;
+  
 }

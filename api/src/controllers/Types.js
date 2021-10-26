@@ -16,11 +16,11 @@ let diets = [
     id: ++dietId,
   },
   {
-    name: "Lacto-Vegetarian",
+    name: "Lacto-vegetarian",
     id: ++dietId,
   },
   {
-    name: "Ovo-Vegetarian",
+    name: "Ovo-vegetarian",
     id: ++dietId,
   },
   {
@@ -41,6 +41,14 @@ let diets = [
   },
   {
     name: "Whole 30",
+    id: ++dietId,
+  },
+  {
+    name: "Dairy free",
+    id: ++dietId,
+  },
+  {
+    name: "Lacto ovo vegetarian",
     id: ++dietId,
   },
 ];

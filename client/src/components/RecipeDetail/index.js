@@ -35,7 +35,7 @@ export default function RecipeDetail(props) {
               </div>
             </div>
             {recipeDetail.Diets?.map((diet) => (
-              <span className={`${s.diet}`}> {diet.name}</span>
+              <span key={diet.name} className={`${s.diet}`}> {diet.name}</span>
             ))}
             <span className={`${s.summary}`}>{recipeDetail.summary}</span>
             {recipeDetail.steps ? (

@@ -44,8 +44,6 @@ export default function AddRecipe() {
   });
 
   function handleInputChange(e) {
-    console.log('E.TARGET.VALUE', e.target.value)
-    console.log('NAME', e.target.name)
   //   setState(prev=>{
   //     const newState = {
   //         ...prev,
@@ -60,14 +58,12 @@ export default function AddRecipe() {
     })
       setErrors(validate(state))
   }
-  console.log("dietas", dietas);
   function handleCheck(e) {
     if (e.target.checked) {
       setState({
         ...state,
         diets: [...state.diets, e.target.value],
       });
-      console.log("diets", state.diets);
     }
   }
 
@@ -169,7 +165,7 @@ export default function AddRecipe() {
           <div className={`${s.caja}`}>
             {dietas.map((diet) => {
               return (
-                <span>
+                <span  key={`${diet.name}`}>
                   <input
                     key={`${diet.id}`}
                     type='checkbox'
